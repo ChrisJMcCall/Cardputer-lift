@@ -17,4 +17,4 @@ Source lives in `src/`. `mpremote mount` mounts a directory on the device withou
 - Time: `ntptime.settime()` sets the RTC to UTC. `now()` applies `UTC_OFFSET_HOURS` (currently a fixed offset, no DST handling) to produce local time. Use `now()` rather than `time.localtime()` directly.
 - Do not keep everything in 1 file. Use python modules to organize.
 - Modules in `src/`: `lift.py` (entry point), `date_time.py` (Wi-Fi/NTP/local time), `menu.py` (screens and keyboard handling), `db.py` (storage).
-- Storage is a `btree` database at `/sd/lift.db` on the Cardputer SD card (mounted by `db.py`; a card must be inserted). Keys are prefixed `ex:`, `plan:`, `meta:` with JSON values. Only `db.py` touches it; `menu.py` goes through its functions.
+- Storage is a `btree` database at `/sd/app_data/lift/lift.db` on the Cardputer SD card (mounted by `db.py`; a card must be inserted). Keys are prefixed `ex:`, `plan:`, `meta:` with JSON values. Only `db.py` touches it; `menu.py` goes through its functions.

@@ -6,7 +6,8 @@ from hardware import sdcard
 # ---- Configuration ----
 
 SD_MOUNT = '/sd'
-DB_PATH = SD_MOUNT + '/lift.db'
+DATA_DIR = SD_MOUNT + '/app_data/lift'
+DB_PATH = DATA_DIR + '/lift.db'
 
 # Key layout (values are JSON):
 #   ex:<name>    -> 1
@@ -26,9 +27,19 @@ def _mount_sd():
   # Note: SDCard umounts /sd first and prints EINVAL when nothing is mounted yet.
   sdcard.SDCard(slot=3, width=1, sck=40, miso=39, mosi=14, cs=12, freq=20000000)
 
+def _ensure_dir(path):
+  cur = ''
+  for part in path.split('/')[1:]:
+    cur += '/' + part
+    try:
+      os.mkdir(cur)
+    except OSError:
+      pass
+
 def open_db():
   global _f, _db
   _mount_sd()
+  _ensure_dir(DATA_DIR)
   try:
     _f = open(DB_PATH, 'r+b')
   except OSError:
