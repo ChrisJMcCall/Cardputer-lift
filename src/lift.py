@@ -25,6 +25,7 @@ if __name__ == '__main__':
     while True:
       loop()
   except (Exception, KeyboardInterrupt) as e:
+    sys.print_exception(e)
     try:
       from utility import print_error_msg
       print_error_msg(e)

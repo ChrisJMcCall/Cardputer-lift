@@ -23,8 +23,8 @@ def _mount_sd():
     return
   except OSError:
     pass
-  # Cardputer SD card slot pins
-    sdcard.SDCard(slot=3, width=1, sck=40, miso=39, mosi=14, cs=12, freq=20000000)
+  # Note: SDCard umounts /sd first and prints EINVAL when nothing is mounted yet.
+  sdcard.SDCard(slot=3, width=1, sck=40, miso=39, mosi=14, cs=12, freq=20000000)
 
 def open_db():
   global _f, _db
