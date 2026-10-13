@@ -1,14 +1,15 @@
-import os, sys, io
-import M5
 from M5 import *
+import esp32
 import network
 import ntptime
 import time
 
+nvs = esp32.NVS("uiflow")
 WIFI_SSID = nvs.get_str("ssid0")
 WIFI_PASSWORD = nvs.get_str("pswd0")
 WIFI_TIMEOUT_MS = 15000
 UTC_OFFSET_HOURS = 6
+DAYS = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')
 
 def connect_wifi():
   wlan = network.WLAN(network.STA_IF)
@@ -40,26 +41,3 @@ def sync_time():
 
 def now():
   return time.localtime(time.time() + UTC_OFFSET_HOURS * 3600)
-
-def setup():
-  global label0
-
-  M5.begin()
-  Widgets.fillScreen(0x000000)
-  if sync_time():
-    print('time synced:', now())
-
-def loop():
-  global label0
-  M5.update()
-
-if __name__ == '__main__':
-  try:
-    setup()
-    loop()
-  except (Exception, KeyboardInterrupt) as e:
-    try:
-      from utility import print_error_msg
-      print_error_msg(e)
-    except ImportError:
-      print("please update to latest firmware")

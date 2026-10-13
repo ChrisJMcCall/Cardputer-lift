@@ -4,7 +4,12 @@
         {
             "label": "Run current file",
             "type": "shell",
-            "command": "mpremote run ${file}"
+            "command": "mpremote fs cp src/*.py : + run src/lift.py"
+        },
+        {
+            "label": "Run project",
+            "type": "shell",
+            "command": "mpremote mount src run src/lift.py"
         }
     ]
 }
