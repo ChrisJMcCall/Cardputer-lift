@@ -2,9 +2,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Run project",
+            "label": "Run Project",
             "type": "shell",
-            "command": "mpremote mount src run src/lift.py"
+            "command": "mpremote soft-reset mount src run src/lift.py",
+            "runOptions": {
+                "instanceLimit": 1,
+                "instancePolicy": "terminateOldest"
+            }
         }
     ]
 }
