@@ -25,12 +25,23 @@ class MainMenu(ListScreen):
       self.last_time, self.dirty = t, True
 
   def draw(self):
-    M5.Display.fillRect(0, 0, 240, 160, 0x000000)
+    if self._needsFullRefresh:
+      M5.Display.fillRect(0, 0, M5.Display.width(), M5.Display.height(), COLOR_BG)
+      self._needsFullRefresh = False
+
+    self.draw_header()
+    self.draw_rows()
+  
+  def draw_header(self):
+    M5.Display.fillRect(0, 0, M5.Display.width(), 24, COLOR_BG)
     date_s, time_s = clock_strings()
     M5.Lcd.setTextColor(WHITE, BLACK)
     M5.Lcd.drawString(date_s, 4, 4)
     M5.Lcd.drawString(time_s, 170, 4)
     M5.Lcd.drawLine(0, 24, 240, 24, GRAY)
+  
+  def draw_rows(self):
+    M5.Display.fillRect(0, 25, M5.Display.width(), M5.Display.height()-25, COLOR_BG)
     for i, row in enumerate(self.rows()):
       draw_row(row, i == self.cursor, 34 + i * 22 + (12 if i else 0))
 
