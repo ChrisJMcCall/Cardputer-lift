@@ -5,6 +5,9 @@ import ui.nav as nav
 from ui.base import *
 
 class ExerciseForm(Screen):
+  title = 'New Exercise'
+  footer = '(ok)Next/Save'
+
   def __init__(self):
     Screen.__init__(self)
     # [label, value, max length]
@@ -12,16 +15,14 @@ class ExerciseForm(Screen):
     self.idx = 0
 
   def draw(self):
-    M5.Display.fillRect(0, 0, 240, 160, 0x000000)
-    M5.Lcd.setTextColor(YELLOW, BLACK)
-    M5.Lcd.drawString('New exercise', 4, 2)
+    super().draw()
+
     for i, (label, value, _) in enumerate(self.fields):
       sel = (i == self.idx)
       M5.Lcd.setTextColor(YELLOW if sel else GRAY, BLACK)
       M5.Lcd.drawString(label + ':', 4, 24 + i * 40)
       M5.Lcd.setTextColor(WHITE, BLACK)
       M5.Lcd.drawString(value[-18:] + ('_' if sel else ' ') + ' ' * 4, 4, 42 + i * 40)
-    draw_footer('(ok)Next/Save')
 
   def on_key(self, k):
     field = self.fields[self.idx]

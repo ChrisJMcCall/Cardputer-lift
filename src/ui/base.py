@@ -28,7 +28,7 @@ def draw_header(text):
   M5.Lcd.drawString(text, 4, 2)
 
 def draw_footer(text):
-  M5.Display.fillRect(0, M5.Display.height()-10, M5.Display.width(), SIZE_FOOTER_HEIGHT, COLOR_BG)
+  M5.Display.fillRect(0, M5.Display.height()-SIZE_FOOTER_HEIGHT, M5.Display.width(), SIZE_FOOTER_HEIGHT, COLOR_BG)
   M5.Lcd.setTextColor(GRAY, BLACK)
   M5.Lcd.drawString(text, 4, 118)
 
@@ -48,10 +48,14 @@ class Screen:
   def draw(self):
     if self._needsFullRefresh:
       draw_header(self.title)
-      M5.Display.fillRect(0, SIZE_HEADER_HEIGHT, M5.Display.width(), M5.Display.height()-(SIZE_HEADER_HEIGHT+SIZE_FOOTER_HEIGHT), COLOR_BG)
 
       if len(self.footer) > 0:
         draw_footer(self.footer)
+
+      M5.Display.fillRect(0, SIZE_HEADER_HEIGHT, M5.Display.width(), M5.Display.height()-(SIZE_HEADER_HEIGHT+SIZE_FOOTER_HEIGHT), COLOR_BG)
+      self._needsFullRefresh = False
+    else:
+      M5.Display.fillRect(0, SIZE_HEADER_HEIGHT, M5.Display.width(), M5.Display.height()-(SIZE_HEADER_HEIGHT+SIZE_FOOTER_HEIGHT), COLOR_BG)
 
   def on_key(self, k):
     pass
