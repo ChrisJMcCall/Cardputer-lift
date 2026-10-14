@@ -25,7 +25,7 @@ class MainMenu(ListScreen):
       self.last_time, self.dirty = t, True
 
   def draw(self):
-    Widgets.fillScreen(BLACK)
+    M5.Display.fillRect(0, 0, 240, 160, 0x000000)
     date_s, time_s = clock_strings()
     M5.Lcd.setTextColor(WHITE, BLACK)
     M5.Lcd.drawString(date_s, 4, 4)

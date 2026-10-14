@@ -1,12 +1,15 @@
 import M5
 from M5 import *
+from unit import KeyCode
 
 # Cardputer key codes; arrows are the ; . , / keys
 KEY_ENTER = (13, 10)
 KEY_BACK = (8, 127)
 KEY_ESC = (27, 96)
-KEY_UP = 59
-KEY_DOWN = 46
+KEY_UP = KeyCode.KEYCODE_UP
+KEY_DOWN = KeyCode.KEYCODE_DOWN
+KEY_RIGHT = KeyCode.KEYCODE_RIGHT
+KEY_LEFT = KeyCode.KEYCODE_LEFT
 
 WHITE = 0xFFFFFF
 GRAY = 0x808080
@@ -55,7 +58,7 @@ class ListScreen(Screen):
     self.dirty = True
 
   def draw(self):
-    Widgets.fillScreen(BLACK)
+    M5.Display.fillRect(0, 0, 240, 160, 0x000000)
     M5.Lcd.setTextColor(YELLOW, BLACK)
     M5.Lcd.drawString(self.title, 4, 2)
     rows = self.rows()

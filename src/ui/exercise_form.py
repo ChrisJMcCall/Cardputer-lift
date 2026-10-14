@@ -12,7 +12,7 @@ class ExerciseForm(Screen):
     self.idx = 0
 
   def draw(self):
-    Widgets.fillScreen(BLACK)
+    M5.Display.fillRect(0, 0, 240, 160, 0x000000)
     M5.Lcd.setTextColor(YELLOW, BLACK)
     M5.Lcd.drawString('New exercise', 4, 2)
     for i, (label, value, _) in enumerate(self.fields):

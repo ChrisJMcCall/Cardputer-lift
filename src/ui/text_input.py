@@ -11,7 +11,7 @@ class TextInput(Screen):
     self.buf = ''
 
   def draw(self):
-    Widgets.fillScreen(BLACK)
+    M5.Display.fillRect(0, 0, 240, 160, 0x000000)
     M5.Lcd.setTextColor(YELLOW, BLACK)
     M5.Lcd.drawString(self.prompt, 4, 4)
     M5.Lcd.setTextColor(WHITE, BLACK)

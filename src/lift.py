@@ -7,7 +7,7 @@ from ui import nav
 
 def setup():
   M5.begin()
-  Widgets.fillScreen(0x000000)
+  M5.Display.fillRect(0, 0, 240, 160, 0x000000)
   M5.Lcd.setTextColor(0xFFFFFF, 0x000000)
   M5.Lcd.drawString('Syncing time...', 4, 4)
   if date_time.sync_time():
