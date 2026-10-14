@@ -8,7 +8,7 @@ A workout tracker for an M5Stack Cardputer (ESP32), written in MicroPython using
 
 ## Running
 
-Source lives in `src/`. `mpremote mount` mounts a directory on the device without causing unnecessary writes on the device's flash memory. The "Run Project" task allows quick testing after changes.
+Source lives in `src/`. `mpremote mount src repl --inject-file util/launch.py` mounts a directory on the device without causing unnecessary writes on the device's flash memory. Within the terminal you can then use Ctrl-C, Ctrl-K to restart the application.
 
 ## Architecture notes
 
