@@ -10,10 +10,11 @@ DATA_DIR = SD_MOUNT + '/app_data/lift'
 DB_PATH = DATA_DIR + '/lift.db'
 
 # Key layout (values are JSON):
-#   ex:<name>    -> {description}
+#   ex:<name>    -> {description, weight, reps, sets} (the last three are bools)
 #   plan:<name>  -> [exercise names in order]
 #   meta:current -> current plan name
 #   meta:order   -> [plan names in display order]
+#   log:<YYYY-MM-DD>:<exercise> -> {done, sets: [[weight, reps], ...]} (values are strings)
 _f = None
 _db = None
 
@@ -80,15 +81,26 @@ def _del(key):
 def exercises():
   return _keys('ex:')
 
-def add_exercise(name, description=''):
+def add_exercise(name, description='', weight=False, reps=False, sets=False):
   if _get('ex:' + name) is None:
-    _put('ex:' + name, {'description': description})
+    _put('ex:' + name, {'description': description, 'weight': weight, 'reps': reps, 'sets': sets})
     return True
   return False
 
-def exercise_description(name):
+def exercise_info(name):
+  """Exercise settings; anything missing (older records) is off, i.e. a plain done checkbox."""
   info = _get('ex:' + name, {})
-  return info.get('description', '') if isinstance(info, dict) else ''
+  if not isinstance(info, dict):
+    info = {}
+  return {
+    'description': info.get('description', ''),
+    'weight': bool(info.get('weight')),
+    'reps': bool(info.get('reps')),
+    'sets': bool(info.get('sets')),
+  }
+
+def exercise_description(name):
+  return exercise_info(name)['description']
 
 def delete_exercise(name):
   _del('ex:' + name)
@@ -146,3 +158,20 @@ def current_plan():
 
 def set_current_plan(name):
   _put('meta:current', name)
+
+# ---- Workout logs ----
+
+def get_log(day, exercise):
+  log = _get('log:%s:%s' % (day, exercise), {})
+  return {'done': bool(log.get('done')), 'sets': log.get('sets', [])}
+
+def set_log(day, exercise, log):
+  _put('log:%s:%s' % (day, exercise), log)
+
+def is_logged(day, exercise):
+  """True once the exercise has a checked 'done' box or at least one logged set."""
+  info = exercise_info(exercise)
+  log = get_log(day, exercise)
+  if info['weight'] or info['reps'] or info['sets']:
+    return bool(log['sets'])
+  return log['done']

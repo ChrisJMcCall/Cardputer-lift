@@ -49,8 +49,11 @@ class MainMenu(ListScreen):
     if super().on_key(k):
       return
     if k in KEY_ENTER:
-      if self.cursor == 1:
+      if self.cursor == 0:
+        plan = db.current_plan()
+        if plan:
+          nav.go('session', plan)
+      elif self.cursor == 1:
         nav.go('plans')
       elif self.cursor == 2:
         nav.go('exercises')
-      # cursor 0 (Start) is a placeholder until workout sessions exist
