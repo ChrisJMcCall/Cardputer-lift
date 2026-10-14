@@ -16,10 +16,19 @@ WHITE = 0xFFFFFF
 GRAY = 0x808080
 YELLOW = 0xFFCC00
 BLACK = 0x000000
+COLOR_BG = BLACK
 COLOR_TITLE_BG = 0x3366ff
 COLOR_TITLE_FG = 0xFFFFFF 
+SIZE_HEADER_HEIGHT = 18
+SIZE_FOOTER_HEIGHT = 18
+
+def draw_header(text):
+  M5.Display.fillRect(0, 0, M5.Display.width(), SIZE_HEADER_HEIGHT, COLOR_TITLE_BG)
+  M5.Lcd.setTextColor(COLOR_TITLE_FG, COLOR_TITLE_BG)
+  M5.Lcd.drawString(text, 4, 2)
 
 def draw_footer(text):
+  M5.Display.fillRect(0, M5.Display.height()-10, M5.Display.width(), SIZE_FOOTER_HEIGHT, COLOR_BG)
   M5.Lcd.setTextColor(GRAY, BLACK)
   M5.Lcd.drawString(text, 4, 118)
 
@@ -29,11 +38,20 @@ def draw_row(text, selected, y):
 
 class Screen:
   """A screen draws itself when dirty and reacts to key presses."""
+  title = ''
+  footer = ''
+  _needsFullRefresh = True
+
   def __init__(self):
     self.dirty = True
 
   def draw(self):
-    pass
+    if self._needsFullRefresh:
+      draw_header(self.title)
+      M5.Display.fillRect(0, SIZE_HEADER_HEIGHT, M5.Display.width(), M5.Display.height()-(SIZE_HEADER_HEIGHT+SIZE_FOOTER_HEIGHT), COLOR_BG)
+
+      if len(self.footer) > 0:
+        draw_footer(self.footer)
 
   def on_key(self, k):
     pass
@@ -43,8 +61,6 @@ class Screen:
 
 class ListScreen(Screen):
   """A screen with a cursor moved by the up/down keys."""
-  title = ''
-  footer = ''
 
   def __init__(self):
     Screen.__init__(self)
@@ -61,9 +77,8 @@ class ListScreen(Screen):
     self.dirty = True
 
   def draw(self):
-    M5.Display.fillRect(0, 0, 240, 160, 0x000000)
-    M5.Lcd.setTextColor(COLOR_TITLE_FG, COLOR_TITLE_BG)
-    M5.Lcd.drawString(self.title, 4, 2)
+    super().draw()
+
     rows = self.rows()
     first = max(0, self.cursor - 4)
     for i, row in enumerate(rows[first:first + 5]):
@@ -71,7 +86,6 @@ class ListScreen(Screen):
     if not rows:
       M5.Lcd.setTextColor(GRAY, BLACK)
       M5.Lcd.drawString('(empty)', 4, 20)
-    draw_footer(self.footer)
 
   def on_key(self, k):
     """Moves the cursor. Returns True if the key was a movement key."""
