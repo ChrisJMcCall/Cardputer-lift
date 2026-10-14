@@ -10,6 +10,16 @@ A workout tracker for an M5Stack Cardputer (ESP32), written in MicroPython using
 
 Source lives in `src/`. `mpremote mount src repl --inject-file util/launch.py` mounts a directory on the device without causing unnecessary writes on the device's flash memory. Within the terminal you can then use Ctrl-C, Ctrl-K to restart the application.
 
+## Tasks
+
+Tooling is managed with uv and tasks run through poethepoet (`pyproject.toml`): `uv run poe <task>`, or `uv run poe` to list them.
+
+- `lint`: `ruff check` on `src/` and `util/` (device modules like `M5` are star-imported, so those warnings are off).
+- `build`: `util/build.py` compiles `src/` to `.mpy` in `build/` with `mpy-cross` (`run.py` is copied as plain `.py`). The `mpy-cross` version must match the firmware's MicroPython bytecode version.
+- `run`: `mpremote mount src run src/run.py`.
+- `repl`: `mpremote mount src repl --inject-file util/launch.py`; Ctrl-K restarts the app.
+- `check`: `lint`, then `build`.
+
 ## Architecture notes
 
 - Entry point follows the UIFlow2 template: `setup()` then `loop()` under `if __name__ == '__main__'`, with errors routed to `utility.print_error_msg` (provided by device firmware).

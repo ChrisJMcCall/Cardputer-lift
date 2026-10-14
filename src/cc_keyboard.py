@@ -1,5 +1,4 @@
 from hardware import MatrixKeyboard
-from unit import KeyCode
 from hardware import RGB
 
 kb = None
@@ -28,7 +27,7 @@ def tick():
 
   if fnKey:
     setFnIndicator(True)
-  elif fnKey == False and fnIndicatorOn == True:
+  elif not fnKey and fnIndicatorOn:
     setFnIndicator(False)
 
 def setup():
