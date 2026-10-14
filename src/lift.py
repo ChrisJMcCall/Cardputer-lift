@@ -3,7 +3,7 @@ import M5
 from M5 import *
 import time
 import date_time
-import menu
+from ui import nav
 
 def setup():
   M5.begin()
@@ -12,11 +12,11 @@ def setup():
   M5.Lcd.drawString('Syncing time...', 4, 4)
   if date_time.sync_time():
     print('time synced:', date_time.now())
-  menu.start()
+  nav.start()
 
 def loop():
   M5.update()
-  menu.tick()
+  nav.tick()
   time.sleep_ms(20)
 
 if __name__ == '__main__':

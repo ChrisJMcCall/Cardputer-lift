@@ -10,7 +10,7 @@ DATA_DIR = SD_MOUNT + '/app_data/lift'
 DB_PATH = DATA_DIR + '/lift.db'
 
 # Key layout (values are JSON):
-#   ex:<name>    -> 1
+#   ex:<name>    -> {description}
 #   plan:<name>  -> [exercise names in order]
 #   meta:current -> current plan name
 _f = None
@@ -79,9 +79,15 @@ def _del(key):
 def exercises():
   return _keys('ex:')
 
-def add_exercise(name):
+def add_exercise(name, description=''):
   if _get('ex:' + name) is None:
-    _put('ex:' + name, 1)
+    _put('ex:' + name, {'description': description})
+    return True
+  return False
+
+def exercise_description(name):
+  info = _get('ex:' + name, {})
+  return info.get('description', '') if isinstance(info, dict) else ''
 
 def delete_exercise(name):
   _del('ex:' + name)
