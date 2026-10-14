@@ -13,6 +13,7 @@ DB_PATH = DATA_DIR + '/lift.db'
 #   ex:<name>    -> {description}
 #   plan:<name>  -> [exercise names in order]
 #   meta:current -> current plan name
+#   meta:order   -> [plan names in display order]
 _f = None
 _db = None
 
@@ -100,21 +101,31 @@ def delete_exercise(name):
 # ---- Plans ----
 
 def plans():
-  return _keys('plan:')
+  """Plan names in display order. Plans missing from meta:order go last, alphabetically."""
+  names = _keys('plan:')
+  order = _get('meta:order', [])
+  return [n for n in order if n in names] + [n for n in names if n not in order]
 
 def plan_items(name):
   return _get('plan:' + name, [])
 
-def add_plan(name):
+def add_plan(name, position=None):
+  """Creates an empty plan at a 0-based display position (default: last)."""
   if _get('plan:' + name) is not None:
     return False
+  order = plans()
+  if position is None or position > len(order):
+    position = len(order)
+  order.insert(max(0, position), name)
   _put('plan:' + name, [])
+  _put('meta:order', order)
   if current_plan() is None:
     set_current_plan(name)
   return True
 
 def delete_plan(name):
   _del('plan:' + name)
+  _put('meta:order', plans())
   if current_plan() == name:
     rest = plans()
     set_current_plan(rest[0] if rest else None)
