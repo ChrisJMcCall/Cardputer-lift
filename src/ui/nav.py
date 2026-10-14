@@ -15,8 +15,14 @@ def go(name, *args):
     from ui.exercise_form import ExerciseForm as S
   elif name == 'plans':
     from ui.plans import PlanList as S
+  elif name == 'plan_form':
+    from ui.plan_form import PlanForm as S
   elif name == 'plan_edit':
     from ui.plan_edit import PlanEdit as S
+  elif name == 'session':
+    from ui.session import Session as S
+  elif name == 'exercise_log':
+    from ui.exercise_log import ExerciseLog as S
   elif name == 'text':
     from ui.text_input import TextInput as S
   current = S(*args)

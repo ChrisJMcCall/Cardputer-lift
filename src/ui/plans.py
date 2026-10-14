@@ -2,10 +2,6 @@ import db
 import ui.nav as nav
 from ui.base import *
 
-def add_plan(name):
-  if name and db.add_plan(name):
-    nav.go('plan_edit', name)
-
 class PlanList(ListScreen):
   title = 'Plans'
   footer = '(n)ew (d)elete (s)et (ok)edit'
@@ -21,7 +17,7 @@ class PlanList(ListScreen):
     if k in KEY_ESC:
       nav.go('main')
     elif k == ord('n'):
-      nav.go('text', 'New plan', add_plan, 'plans')
+      nav.go('plan_form')
     elif n and k == ord('d'):
       db.delete_plan(db.plans()[self.cursor])
       self.move_after_delete(n)

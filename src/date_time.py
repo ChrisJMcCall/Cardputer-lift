@@ -39,5 +39,9 @@ def sync_time():
     return False
   return True
 
+def today():
+  t = now()
+  return '%04d-%02d-%02d' % (t[0], t[1], t[2])
+
 def now():
   return time.localtime(time.time() + UTC_OFFSET_HOURS * 3600)
