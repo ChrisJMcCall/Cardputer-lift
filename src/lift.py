@@ -4,18 +4,21 @@ from M5 import *
 import time
 import date_time
 from ui import nav
+import cc_keyboard
 
 def setup():
   M5.begin()
+  cc_keyboard.setup()
   M5.Display.fillRect(0, 0, 240, 160, 0x000000)
   M5.Lcd.setTextColor(0xFFFFFF, 0x000000)
   M5.Lcd.drawString('Syncing time...', 4, 4)
   if date_time.sync_time():
     print('time synced:', date_time.now())
-  nav.start()
+  nav.start(cc_keyboard.kb)
 
 def loop():
   M5.update()
+  cc_keyboard.tick()
   nav.tick()
   time.sleep_ms(20)
 

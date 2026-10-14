@@ -1,8 +1,8 @@
 # Screen router and main-loop glue between the keyboard and the active screen.
 import db
 
-kb = None
 current = None
+kb = None
 
 def go(name, *args):
   global current
@@ -21,15 +21,14 @@ def go(name, *args):
     from ui.text_input import TextInput as S
   current = S(*args)
 
-def start():
+def start(kb_0):
   global kb
-  from hardware import MatrixKeyboard
-  kb = MatrixKeyboard()
+
+  kb = kb_0
   db.open_db()
   go('main')
 
 def tick():
-  kb.tick()
   if kb.is_pressed():
     current.on_key(kb.get_key())
   current.tick()
