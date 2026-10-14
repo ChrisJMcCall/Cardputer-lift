@@ -24,7 +24,6 @@ def connect_wifi():
     while not wlan.isconnected():
       if time.ticks_diff(time.ticks_ms(), start) > WIFI_TIMEOUT_MS:
         return False
-      time.sleep_ms(200)
   return True
 
 def sync_time():
@@ -33,6 +32,7 @@ def sync_time():
     print('wifi connect failed, time not synced')
     return False
   try:
+    ntptime.host = "time.google.com"
     ntptime.settime()
   except OSError as e:
     print('ntp sync failed:', e)
