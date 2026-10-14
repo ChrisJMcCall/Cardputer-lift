@@ -18,7 +18,8 @@ Tooling is managed with uv and tasks run through poethepoet (`pyproject.toml`): 
 - `build`: `util/build.py` compiles `src/` to `.mpy` in `build/` with `mpy-cross` (`run.py` is copied as plain `.py`). The `mpy-cross` version must match the firmware's MicroPython bytecode version.
 - `run`: `mpremote mount src run src/run.py`.
 - `repl`: `mpremote mount src repl --inject-file util/launch.py`; Ctrl-K restarts the app.
-- `check`: `lint`, then `build`.
+- `test`: unit tests in `tests/`, run on the MicroPython unix port inside Docker (`micropython/unix`; Docker must be running). Device-only modules (`M5`, `hardware`, ...) are stubbed in `tests/stubs/`; `tests/support.py` has the throwaway database and key-press helpers.
+- `check`: `lint`, `test`, then `build`.
 
 ## Architecture notes
 
