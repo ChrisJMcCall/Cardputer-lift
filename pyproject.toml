@@ -1,0 +1,36 @@
+[project]
+name = "lift"
+version = "0.1.0"
+description = "Workout tracker for the M5Stack Cardputer (MicroPython)"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "mpy-cross>=1.26",
+  "poethepoet",
+  "ruff",
+]
+
+[tool.ruff]
+src = ["src"]
+extend-exclude = ["tests/lib"]
+indent-width = 2
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+ignore = [
+  "F403",  # device modules (M5, ...) are star-imported by the UIFlow template
+  "F405",
+  "E501",
+  "E701",
+  "E702",
+]
+
+[tool.poe.tasks]
+lint = { cmd = "ruff check", help = "Lint src/ and util/" }
+build = { cmd = "python util/build.py", help = "Compile src/ to .mpy in build/" }
+run = { cmd = "mpremote mount src run src/run.py", help = "Run the app from src/ without writing to flash" }
+repl = { cmd = "mpremote mount src repl --inject-file util/launch.py", help = "Mount src/ and open the REPL (ctrl-K restarts the app)" }
+test = { cmd = "docker run --rm --platform linux/amd64 -v ${PWD}:/app -w /app micropython/unix:v1.29.0 tests/run.py", help = "Run unit tests on the MicroPython unix port (Docker)" }
+check = { sequence = ["lint", "test", "build"], help = "Lint, test, then build" }

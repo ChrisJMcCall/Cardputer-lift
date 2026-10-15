@@ -1,4 +1,4 @@
-import os, sys, io
+import sys
 import M5
 from M5 import *
 import time

@@ -31,7 +31,7 @@ class MainMenu(ListScreen):
 
     self.draw_header()
     self.draw_rows()
-  
+
   def draw_header(self):
     M5.Display.fillRect(0, 0, M5.Display.width(), 24, COLOR_BG)
     date_s, time_s = clock_strings()
@@ -39,7 +39,7 @@ class MainMenu(ListScreen):
     M5.Lcd.drawString(date_s, 4, 4)
     M5.Lcd.drawString(time_s, 170, 4)
     M5.Lcd.drawLine(0, 24, 240, 24, GRAY)
-  
+
   def draw_rows(self):
     M5.Display.fillRect(0, 25, M5.Display.width(), M5.Display.height()-25, COLOR_BG)
     for i, row in enumerate(self.rows()):

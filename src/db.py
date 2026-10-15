@@ -136,9 +136,10 @@ def add_plan(name, position=None):
   return True
 
 def delete_plan(name):
+  was_current = current_plan() == name
   _del('plan:' + name)
   _put('meta:order', plans())
-  if current_plan() == name:
+  if was_current:
     rest = plans()
     set_current_plan(rest[0] if rest else None)
 

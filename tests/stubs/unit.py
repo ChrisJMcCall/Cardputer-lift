@@ -1,0 +1,5 @@
+class KeyCode:
+  KEYCODE_UP = 59
+  KEYCODE_DOWN = 46
+  KEYCODE_LEFT = 44
+  KEYCODE_RIGHT = 47
