@@ -1,28 +1,30 @@
 import db
 import ui.nav as nav
-from ui.base import *
+from ccui.screen import Screen
+from ccui.view import ListView
 
-class PlanList(ListScreen):
+class PlanList(Screen):
   title = 'Plans'
-  footer = '(n)ew (d)elete (s)et (ok)edit'
+
+  def build(self):
+    self.list = ListView(self.rows, lambda i: nav.go('plan_edit', db.plans()[i]))
+    self.commands = [
+      (ord('n'), 'New', lambda: nav.go('plan_form')),
+      (ord('d'), 'Delete', self.delete),
+      (ord('s'), 'Set current', self.set_current),
+    ]
+    return self.list
 
   def rows(self):
     cur = db.current_plan()
     return [('* ' if p == cur else '') + p for p in db.plans()]
 
-  def on_key(self, k):
-    if super().on_key(k):
-      return
-    n = self.count()
-    if k in KEY_ESC:
-      nav.go('main')
-    elif k == ord('n'):
-      nav.go('plan_form')
-    elif n and k == ord('d'):
-      db.delete_plan(db.plans()[self.cursor])
-      self.move_after_delete(n)
-    elif n and k == ord('s'):
-      db.set_current_plan(db.plans()[self.cursor])
-      self.dirty = True
-    elif n and k in KEY_ENTER:
-      nav.go('plan_edit', db.plans()[self.cursor])
+  def delete(self):
+    if self.list.rows:
+      db.delete_plan(db.plans()[self.list.cursor])
+      self.list.reload()
+
+  def set_current(self):
+    if self.list.rows:
+      db.set_current_plan(db.plans()[self.list.cursor])
+      self.list.reload()

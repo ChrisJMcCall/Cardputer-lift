@@ -6,7 +6,7 @@ import ui.nav as nav
 
 DIR = '/tmp/lift_test'
 ENTER, ESC, BACK = 13, 27, 8
-UP, DOWN = 59, 46
+UP, DOWN = 181, 182
 
 nav_calls = []
 

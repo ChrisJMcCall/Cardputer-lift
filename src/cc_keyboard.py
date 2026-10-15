@@ -4,6 +4,8 @@ from hardware import RGB
 kb = None
 rgb21 = None
 fnIndicatorOn = False
+ctrlWasDown = False
+ctrlPressedEvent = False
 
 def setFnIndicator(setOn):
   global fnIndicatorOn
@@ -21,9 +23,23 @@ def setFnIndicator(setOn):
 def kb_pressed_event(kb_0):
   pass
 
+def ctrl_pressed():
+  """True once per ctrl press (a bare modifier produces no key code)."""
+  global ctrlPressedEvent
+
+  pressed, ctrlPressedEvent = ctrlPressedEvent, False
+  return pressed
+
 def tick():
+  global ctrlWasDown, ctrlPressedEvent
+
   kb.tick()
-  fnKey = kb._keyboard.keys_state().fn
+  state = kb._keyboard.keys_state()
+  ctrlDown = state.ctrl
+  if ctrlDown and not ctrlWasDown:
+    ctrlPressedEvent = True
+  ctrlWasDown = ctrlDown
+  fnKey = state.fn
 
   if fnKey:
     setFnIndicator(True)

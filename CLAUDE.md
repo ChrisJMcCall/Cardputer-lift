@@ -30,3 +30,7 @@ Tooling is managed with uv and tasks run through poethepoet (`pyproject.toml`): 
 - Modules in `src/`: `lift.py` (entry point), `date_time.py` (Wi-Fi/NTP/local time), `ui/` (one module per screen, see below), `db.py` (storage).
 - Storage is a `btree` database at `/sd/app_data/lift/lift.db` on the Cardputer SD card (mounted by `db.py`; a card must be inserted). Keys are prefixed `ex:`, `plan:`, `meta:` (`meta:order` is the plan display order) and `log:<date>:<exercise>` (workout logs, keyed by local date). An exercise's `weight`/`reps`/`sets` flags decide what its log screen (`ui/exercise_log.py`) offers; with none set it is a done checkbox with JSON values. Only `db.py` touches it; screens go through its functions.
 - `ui/`: `nav.py` is the router and keyboard glue (`nav.go('<name>', *args)` swaps the active screen; screen names are mapped to classes there). `base.py` has the `Screen`/`ListScreen` base classes, colors and key codes. Each other module is one screen; screens draw only when `self.dirty` is set.
+
+## Dependencies
+
+- Prompt before installing new tools or dependencies

@@ -1,8 +1,31 @@
 # Screen router and main-loop glue between the keyboard and the active screen.
 import db
+from ccui.nav import Navigator
+from ccui.theme import KEY_MENU
 
 current = None
 kb = None
+ctrl = None  # callable: True once per ctrl press
+
+# Screens built on ccui, and the legacy screen ESC returns to from them.
+CCUI_BACK = {'plans': 'main'}
+
+class Host:
+  """Runs a ccui screen inside this router."""
+  dirty = True  # ccui views only redraw themselves when invalidated
+
+  def __init__(self, screen, back):
+    self.nav = Navigator(on_exit=lambda: go(back))
+    self.nav.push(screen)
+
+  def on_key(self, k):
+    self.nav.top.on_key(k)
+
+  def tick(self):
+    self.nav.top.tick()
+
+  def draw(self):
+    self.nav.top.render()
 
 def go(name, *args):
   global current
@@ -25,16 +48,18 @@ def go(name, *args):
     from ui.exercise_log import ExerciseLog as S
   elif name == 'text':
     from ui.text_input import TextInput as S
-  current = S(*args)
+  current = Host(S(*args), CCUI_BACK[name]) if name in CCUI_BACK else S(*args)
 
-def start(kb_0):
-  global kb
+def start(kb_0, ctrl_0=None):
+  global kb, ctrl
 
-  kb = kb_0
+  kb, ctrl = kb_0, ctrl_0
   db.open_db()
   go('main')
 
 def tick():
+  if ctrl and ctrl():
+    current.on_key(KEY_MENU)
   if kb.is_pressed():
     current.on_key(kb.get_key())
   current.tick()

@@ -14,7 +14,7 @@ def setup():
   M5.Lcd.drawString('Syncing time...', 4, 4)
   if date_time.sync_time():
     print('time synced:', date_time.now())
-  nav.start(cc_keyboard.kb)
+  nav.start(cc_keyboard.kb, cc_keyboard.ctrl_pressed)
 
 def loop():
   M5.update()
